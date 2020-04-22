@@ -1,0 +1,47 @@
+# ====================== SPRING_BOOT CONFIG FOR APP ======================
+spring:
+  profiles: default
+  active: default
+  kafka:
+    bootstrap-servers:
+      - ${KAFKA_BROKER:localhost:9092}
+    properties:
+      # CCloud broker connection parameters
+      # ssl.endpoint.identification.algorithm: https
+      sasl.mechanism: PLAIN
+      request.timeout.ms: ${KAFKA_REQUEST_TIMEOUT:20000}
+      retry.backoff.ms: ${KAFKA_BACKOUT_MS:500}
+      # sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="ccloud_key" password="ccloud_secret";   (2)
+      # security.protocol: SASL_SSL
+
+      # CCloud Schema Registry Connection parameter
+      schema.registry.url: ${KAFKA_SCHEMA_REGISTRY:http://localhost:8081}
+      # basic.auth.credentials.source: USER_INFO
+      # schema.registry.basic.auth.user.info: sr_ccloud_key:sr_ccloud_key
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUPID:java-news-raw-01}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    template:
+      default-topic:
+# ====================== GENERIC CONFIG FOR APP ======================
+topic:
+  name: ${KAFKA_TOPIC_NAME:news-raw}
+  partitions-num: ${KAFKA_TOPIC_PARTITIONNUM:1}
+  replication-factor: ${KAFKA_TOPIC_REPLICATIONFACTOR:1}
+orientdb:
+  url: ${ORIENTDB_URL:remote:localhost}
+  db: ${ORIENTDB_DB_NAME:news-raw}
+  # change to appropriate roles
+  writerUser: ${ORIENTDB_WRITER_USER:admin}
+  writerPass: ${ORIENTDB_WRITER_PASS:admin}
+  readerUser: ${ORIENTDB_READER_USER:admin}
+  readerPass: ${ORIENTDB_READER_PASS:admin}
+logging:
+  level:
+    root: info
+

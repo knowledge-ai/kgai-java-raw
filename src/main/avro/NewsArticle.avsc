@@ -1,0 +1,104 @@
+{
+  "type": "record",
+  "name": "NewsArticle",
+  "namespace": "ai.knowledge.news.raw",
+  "doc": "NewsArticle(title: str, publishedAt: str, url: str, urlToImage: Union[str, NoneType], description: Union[str, NoneType], content: Union[str, NoneType], author: Union[str, NoneType], source: tr_py_commons.model.googlenews.source_article.SourceArticle)",
+  "fields": [
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "publishedAt",
+      "type": "string"
+    },
+    {
+      "name": "url",
+      "type": "string"
+    },
+    {
+      "name": "urlToImage",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "description",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "content",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "author",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "source",
+      "type": {
+        "type": "record",
+        "name": "SourceArticle",
+        "doc": "SourceArticle(name: str, id: Union[str, NoneType], description: Union[str, NoneType], url: Union[str, NoneType], category: Union[str, NoneType], language: Union[str, NoneType], country: Union[str, NoneType])",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "name": "description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "name": "url",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "name": "category",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "name": "language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "name": "country",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
