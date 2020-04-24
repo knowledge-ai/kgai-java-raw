@@ -6,6 +6,12 @@
     <!-- ====================================================================== -->
     <!-- Basic Information                                                      -->
     <!-- ====================================================================== -->
+    <properties>
+        <java.version>1.8</java.version>
+        <!--suppress UnresolvedMavenProperty -->
+        <app.version>${env.APP_VERSION}</app.version>
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -14,13 +20,9 @@
     </parent>
     <groupId>ai.knowledge.raw</groupId>
     <artifactId>kgai-java-raw</artifactId>
-    <version>0.0.1.RELEASE</version>
+    <version>${app.version}</version>
     <name>kgai-java-raw</name>
     <description>common utilities for knowledge streaming platform</description>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
     <!-- ====================================================================== -->
     <!-- Dependencies                                                           -->

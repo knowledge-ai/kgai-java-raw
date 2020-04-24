@@ -1,0 +1,36 @@
+name: Tests
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build:
+    # Job name is Greeting
+    name: Execute tests
+    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout provisioning repo
+        uses: actions/checkout@v2.1.0
+        with:
+          repository: knowledge-ai/kgai-provisioner
+          path: kgai-provisioner
+
+      - name: Checkout test target repo
+          uses: actions/checkout@v2.1.0
+          with:
+            repository: knowledge-ai/kgai-java-raw
+            path: main
+
+      - name: Build the docker-compose stack for supporting services
+        run: docker-compose -f kgai-provisioner/orientdb/orientdb-compose.yml up -d
+
+      - name: wait for containers to be ready
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+
+      - name: check running containers
+        run: docker ps
+
+      - name: Run the app tests
+        run: make run-tests
