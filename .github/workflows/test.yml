@@ -22,7 +22,7 @@ jobs:
           path: main
 
       - name: Build the docker-compose stack for supporting services
-        run: docker-compose -f kgai-provisioner/orientdb/orientdb-compose.yml up -d
+        run: cd kgai-provisioner && make orientdb-up-dev
 
       - name: wait for containers to be ready
         uses: jakejarvis/wait-action@master
