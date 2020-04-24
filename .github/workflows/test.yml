@@ -21,7 +21,7 @@ jobs:
           repository: knowledge-ai/kgai-java-raw
           path: main
 
-      - name: Build the docker-compose stack for supporting services
+      - name: bring up the supporting services for tests
         run: cd kgai-provisioner && make orientdb-up-dev
 
       - name: wait for containers to be ready
