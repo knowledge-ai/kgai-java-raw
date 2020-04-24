@@ -71,6 +71,7 @@ function version_bump() {
 function compile_source() {
   if [[ -z "${APP_RELEASE}" ]]; then
     echo "APP_RELEASE is not set"
+    export APP_VERSION=$(cat "./version.md")
   else
     echo "APP_RELEASE is set doing a release from current branch.."
     # check and update version
