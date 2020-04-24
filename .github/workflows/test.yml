@@ -22,15 +22,15 @@ jobs:
           path: main
 
       - name: bring up the supporting services for tests
-        run: cd kgai-provisioner && make orientdb-up-dev
+        run: cd kgai-provisioner && make orientdb-up-dev && make kafka-up
 
       - name: wait for containers to be ready
         uses: jakejarvis/wait-action@master
         with:
-          time: '10s'
+          time: '3s'
 
       - name: check running containers
         run: docker ps
 
       - name: Run the app tests
-        run: make run-tests
+        run: cd main && make run-tests
