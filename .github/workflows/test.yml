@@ -16,10 +16,10 @@ jobs:
           path: kgai-provisioner
 
       - name: Checkout test target repo
-          uses: actions/checkout@v2.1.0
-          with:
-            repository: knowledge-ai/kgai-java-raw
-            path: main
+        uses: actions/checkout@v2.1.0
+        with:
+          repository: knowledge-ai/kgai-java-raw
+          path: main
 
       - name: Build the docker-compose stack for supporting services
         run: docker-compose -f kgai-provisioner/orientdb/orientdb-compose.yml up -d
