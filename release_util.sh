@@ -87,7 +87,7 @@ function build_docker() {
 
   echo "building docker image with APP_VERSION: ${APP_VERSION}"
 
-  docker build -f Dockerfile --build-arg app_version="${APP_VERSION}" -t kgai-java-raw:"${APP_VERSION}" .
+  docker build -f Dockerfile --build-arg app_version="${APP_VERSION}" -t knowledgeai/kgai-java-raw:"${APP_VERSION}" .
 }
 
 build_docker
