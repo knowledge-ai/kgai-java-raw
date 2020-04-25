@@ -22,7 +22,7 @@ jobs:
           path: main
 
       - name: bring up the supporting services for tests
-        run: cd kgai-provisioner && make orientdb-up-dev && make kafka-up && make orientdb-create-db-dev
+        run: cd kgai-provisioner && make orientdb-up-dev && make kafka-dev-up && make orientdb-create-db-dev
 
       - name: wait for containers to be ready
         uses: jakejarvis/wait-action@master
