@@ -1,3 +1,5 @@
+[Github Actions (CI/CD)](https://github.com/knowledge-ai/kgai-java-raw/workflows/Tests/badge.svg)
+
 ## What is this about ?
 
 Common utilities for java microservices that work on the knowledge streaming platform

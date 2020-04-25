@@ -8,10 +8,10 @@ build-release: ## release a new version of the app and build the docker for it
 	export APP_RELEASE=1 && . ./release_util.sh && unset APP_RELEASE
 
 run-app: ## runs the dockerized app
-	docker run kgai-java-raw:$(cat "./version.md")
+	docker run kgai-java-raw:$(shell cat "./version.md")
 
 run-app-interactive: ## runs the dockerized app interactive mode
-	docker run -it kgai-java-raw:$(cat "./version.md")
+	docker run -it kgai-java-raw:$(shell cat "./version.md")
 
 run-tests: ## runs tests for the app through maven
 	mvn test
