@@ -1,4 +1,4 @@
-[Github Actions (CI/CD)](https://github.com/knowledge-ai/kgai-java-raw/workflows/Tests/badge.svg)
+![](https://github.com/knowledge-ai/kgai-java-raw/workflows/Tests/badge.svg)
 
 ## What is this about ?
 
