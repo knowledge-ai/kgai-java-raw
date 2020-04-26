@@ -34,7 +34,8 @@ public class TrConsumePublishTest {
                 "category", "language", "country");
         String article_title = "title";
         NewsArticle newsArticle = new NewsArticle(article_title, "date", "url",
-                "url2image", "some description", "some content", "Author Name",
+                "url2image", "some description", "some content", "Author " +
+                "Name", "",
                 sourceArticle);
 
         // publish message
