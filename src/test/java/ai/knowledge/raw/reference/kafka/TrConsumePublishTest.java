@@ -1,5 +1,7 @@
 package ai.knowledge.raw.reference.kafka;
 
+import ai.knowledge.news.raw.NewsArticle;
+import ai.knowledge.news.raw.SourceArticle;
 import ai.knowledge.raw.reference.kafka.consumer.TrConsumer;
 import ai.knowledge.raw.reference.kafka.producer.TrProducer;
 import org.junit.jupiter.api.Test;
@@ -8,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import ai.knowledge.news.raw.NewsArticle;
-import ai.knowledge.news.raw.SourceArticle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +34,8 @@ public class TrConsumePublishTest {
                 "category", "language", "country");
         String article_title = "title";
         NewsArticle newsArticle = new NewsArticle(article_title, "date", "url",
-                "url2image", "some description", "some content", "Author Name",
-                sourceArticle);
+                "url2image", "some description", "some content", "Author " +
+                "Name", "articletext", sourceArticle);
 
         // publish message
         trProducer.sendMessage(newsArticle);

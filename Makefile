@@ -13,5 +13,8 @@ run-app: ## runs the dockerized app
 run-app-interactive: ## runs the dockerized app interactive mode
 	docker run -it knowledgeai/kgai-java-raw:$(shell cat "./version.md")
 
+push-image: ## push the built image to the docker repo
+	docker push knowledgeai/kgai-java-raw:$(shell cat "./version.md")
+
 run-tests: ## runs tests for the app through maven
 	mvn test

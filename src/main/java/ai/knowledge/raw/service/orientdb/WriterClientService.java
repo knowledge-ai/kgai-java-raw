@@ -1,6 +1,7 @@
 package ai.knowledge.raw.service.orientdb;
 
 import com.orientechnologies.orient.core.db.ODatabaseSession;
+import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import lombok.NonNull;
@@ -10,6 +11,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
 
 @CommonsLog
 public class WriterClientService extends ConnectionPoolService {
@@ -19,15 +21,38 @@ public class WriterClientService extends ConnectionPoolService {
         super(orientUrl, orientDB, orientUser, orientPass);
     }
 
+    /**
+     * creates a vertex document with all fields from given object.
+     * creates a random id as unique id for each document
+     *
+     * @param vertexObj
+     * @return
+     */
     public OVertex createVertex(@NonNull Object vertexObj) {
+        return createVertex(vertexObj, UUID.randomUUID().toString());
+
+    }
+
+    /**
+     * creates a vertex document with all fields from given object.
+     *
+     * @param vertexObj
+     * @param id
+     * @return
+     */
+    public OVertex createVertex(@NonNull Object vertexObj, @NonNull String id) {
         try (ODatabaseSession db = pool.acquire()) {
             // check and create vertex class
             if (db.getClass(vertexObj.getClass().getSimpleName()) == null) {
-                db.createVertexClass(vertexObj.getClass().getSimpleName());
+                // create an index for document id
+                db.createVertexClass(vertexObj.getClass().getSimpleName()).createIndex("id", OClass.INDEX_TYPE.UNIQUE, "id");
             }
 
             // Create vertex
             OVertex vertex = db.newVertex(vertexObj.getClass().getSimpleName());
+
+            // set the id property
+            vertex.setProperty("id", id);
 
             // Getting fields of the class
             Field[] fields = vertexObj.getClass().getDeclaredFields();
@@ -51,16 +76,41 @@ public class WriterClientService extends ConnectionPoolService {
 
     }
 
+    /**
+     * creates a edge document with all fields from given object.
+     * creates a random id as unique id for each document
+     *
+     * @param fromV
+     * @param toV
+     * @param edgeName
+     * @return
+     */
     public OEdge createEdge(@NonNull OVertex fromV, @NonNull OVertex toV,
                             @NonNull String edgeName) {
+        return createEdge(fromV, toV, edgeName, UUID.randomUUID().toString());
+    }
+
+    /**
+     * creates a edge document with all fields from given object.
+     *
+     * @param fromV
+     * @param toV
+     * @param edgeName
+     * @param id
+     * @return
+     */
+    public OEdge createEdge(@NonNull OVertex fromV, @NonNull OVertex toV,
+                            @NonNull String edgeName, @NonNull String id) {
         try (ODatabaseSession db = pool.acquire()) {
             // check and create vertex class
             if (db.getClass(edgeName) == null) {
-                db.createEdgeClass(edgeName);
+                db.createEdgeClass(edgeName).createIndex("id", OClass.INDEX_TYPE.UNIQUE, "id");
             }
 
             // Create vertex
             OEdge edge = db.newEdge(fromV, toV, edgeName);
+            // set the id property
+            edge.setProperty("id", id);
             //save the edge
             return (OEdge) edge.save();
         } finally {
@@ -70,16 +120,41 @@ public class WriterClientService extends ConnectionPoolService {
         }
     }
 
+    /**
+     * creates a edge document with all fields from given object.
+     * creates a random id as unique id for each document
+     *
+     * @param fromV
+     * @param toV
+     * @param edgeObj
+     * @return
+     */
     public OEdge createEdge(@NonNull OVertex fromV, @NonNull OVertex toV,
                             @NonNull Object edgeObj) {
+        return createEdge(fromV, toV, edgeObj, UUID.randomUUID().toString());
+    }
+
+    /**
+     * creates a edge document with all fields from given object.
+     *
+     * @param fromV
+     * @param toV
+     * @param edgeObj
+     * @param id
+     * @return
+     */
+    public OEdge createEdge(@NonNull OVertex fromV, @NonNull OVertex toV,
+                            @NonNull Object edgeObj, @NonNull String id) {
         try (ODatabaseSession db = pool.acquire()) {
             // check and create vertex class
             if (db.getClass(edgeObj.getClass().getSimpleName()) == null) {
-                db.createEdgeClass(edgeObj.getClass().getSimpleName());
+                db.createEdgeClass(edgeObj.getClass().getSimpleName()).createIndex("id", OClass.INDEX_TYPE.UNIQUE, "id");
             }
 
             // Create vertex
             OEdge edge = db.newEdge(fromV, toV, edgeObj.getClass().getSimpleName());
+            // set the id property
+            edge.setProperty("id", id);
 
             // Getting fields of the class
             Field[] fields = edgeObj.getClass().getDeclaredFields();
@@ -108,7 +183,7 @@ public class WriterClientService extends ConnectionPoolService {
             return pd.getReadMethod().invoke(obj);
         } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             log.error(String.format("Could not call getter for object: %s, " +
-                            "fieled: %s, error: %s",
+                            "field: %s, error: %s",
                     obj.getClass().getSimpleName(), fieldName, e.getMessage()));
         }
         return null;

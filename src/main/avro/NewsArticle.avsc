@@ -2,7 +2,7 @@
   "type": "record",
   "name": "NewsArticle",
   "namespace": "ai.knowledge.news.raw",
-  "doc": "NewsArticle(title: str, publishedAt: str, url: str, urlToImage: Union[str, NoneType], description: Union[str, NoneType], content: Union[str, NoneType], author: Union[str, NoneType], source: tr_py_commons.model.googlenews.source_article.SourceArticle)",
+  "doc": "NewsArticle(title: str, publishedAt: str, url: str, urlToImage: Union[str, NoneType], description: Union[str, NoneType], content: Union[str, NoneType], author: Union[str, NoneType], articleText: Union[str, NoneType], source: kgai_py_commons.model.googlenews.source_article.SourceArticle)",
   "fields": [
     {
       "name": "title",
@@ -39,6 +39,13 @@
     },
     {
       "name": "author",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "articleText",
       "type": [
         "string",
         "null"

@@ -51,7 +51,8 @@ public class TrReadWriteClientTest {
         // can be handled
         String article_title = "title";
         NewsArticle newsArticle = new NewsArticle(article_title, "date", "url",
-                "url2image", "some description", "some content", "Author Name",
+                "url2image", "some description", "some content", "Author " +
+                "Name", "articletext",
                 new SourceArticle("name", "id", "description", "url",
                         "category", "language", "country"));
         // create the vertex in the DB
@@ -100,7 +101,8 @@ public class TrReadWriteClientTest {
         // can be handled
         String article_title = "title";
         NewsArticle newsArticle = new NewsArticle(article_title, "date", "url",
-                "url2image", "some description", "some content", "Author Name",
+                "url2image", "some description", "some content", "Author " +
+                "Name", "articletext",
                 new SourceArticle("name", "id", "description", "url",
                         "category", "language", "country"));
         // create the vertex in the DB
