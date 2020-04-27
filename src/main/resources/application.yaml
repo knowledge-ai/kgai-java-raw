@@ -46,4 +46,4 @@ orientdb:
   readerPass: ${ORIENTDB_READER_PASS:admin}
 logging:
   level:
-    root: debug
+    root: info

@@ -36,8 +36,6 @@ public class ConsumerService {
     @Autowired
     private KafkaListenerEndpointRegistry registry;
 
-    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
     private WriterClientService writerClientService;
 
 
