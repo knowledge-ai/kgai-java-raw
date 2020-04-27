@@ -21,6 +21,9 @@ jobs:
           repository: knowledge-ai/kgai-java-raw
           path: main
 
+      - name: bring up the services network
+        run: cd kgai-provisioner && make create-network && make efk-dev-up
+
       - name: bring up the supporting services for tests
         run: cd kgai-provisioner && make orientdb-dev-up && make kafka-dev-up && make orientdb-create-db-dev
 
