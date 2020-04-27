@@ -13,7 +13,7 @@ spring:
       retry.backoff.ms: ${KAFKA_BACKOUT_MS:500}
       # sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="ccloud_key" password="ccloud_secret";   (2)
       # security.protocol: SASL_SSL
-
+      specific.avro.reader: true
       # CCloud Schema Registry Connection parameter
       schema.registry.url: ${KAFKA_SCHEMA_REGISTRY:http://localhost:8081}
       # basic.auth.credentials.source: USER_INFO
@@ -29,6 +29,9 @@ spring:
     template:
       default-topic:
 # ====================== GENERIC CONFIG FOR APP ======================
+kafka:
+  bootstrapAddress: ${KAFKA_BROKER:localhost:9092}
+  consumerID: news-raw-java
 topic:
   name: ${KAFKA_TOPIC_NAME:news-raw}
   partitions-num: ${KAFKA_TOPIC_PARTITIONNUM:1}
@@ -43,5 +46,4 @@ orientdb:
   readerPass: ${ORIENTDB_READER_PASS:admin}
 logging:
   level:
-    root: info
-
+    root: debug
