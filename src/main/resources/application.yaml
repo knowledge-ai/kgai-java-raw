@@ -29,9 +29,6 @@ spring:
     template:
       default-topic:
 # ====================== GENERIC CONFIG FOR APP ======================
-kafka:
-  bootstrapAddress: ${KAFKA_BROKER:localhost:9092}
-  consumerID: news-raw-java
 topic:
   name: ${KAFKA_TOPIC_NAME:news-raw}
   partitions-num: ${KAFKA_TOPIC_PARTITIONNUM:1}
