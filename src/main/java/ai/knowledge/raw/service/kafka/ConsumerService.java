@@ -1,10 +1,12 @@
 package ai.knowledge.raw.service.kafka;
 
 import ai.knowledge.news.raw.NewsArticle;
+import ai.knowledge.news.raw.SourceArticle;
 import ai.knowledge.raw.model.News;
+import ai.knowledge.raw.model.Source;
 import ai.knowledge.raw.service.orientdb.WriterClientService;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @CommonsLog(topic = "Raw Consumer Logger")
@@ -34,28 +36,18 @@ public class ConsumerService {
     @Autowired
     private KafkaListenerEndpointRegistry registry;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private WriterClientService writerClientService;
 
 
     @KafkaListener(id = "Java-RawConsumer", topics = "${topic.name}",
             autoStartup = "false")
-    public void consume(ConsumerRecord<String, News> record) {
-        log.info(String.format("Consumed message -> %s", record));
+    public void consume(ConsumerRecord<String, NewsArticle> record) {
+        log.info(String.format("Consumed message -> %s", record.value()));
         // each record is ConsumerRecord<String, NewsArticle>
-        // needs explicit cast/variable otherwise library below not works
-        /*News news = null;
-        String jsonString = record.value().toString();
-        try {
-            news = objectMapper.readValue(jsonString, News.class);
-        } catch (IOException e) {
-            log.error(String.format("Could not convert Kafka message to News " +
-                    "data type, jsonString: %s, error: %s", jsonString, e));
-        }
-        if (news != null) {
-            writerClientService.createVertex(news, record.key());
-        }*/
+        writerClientService.createVertex(mapToNews(record.value()), record.key());
+
     }
 
     // delay start, read: https://docs.spring.io/spring-kafka/reference/html/#kafkalistener-lifecycle
@@ -71,16 +63,27 @@ public class ConsumerService {
         this.registry.getListenerContainer("Java-RawConsumer").stop();
     }
 
-    public News mapToNews(String jsonString) {
-        //Car car = objectMapper.readValue(json, Car.class);
-        News news = null;
-        try {
-            news = objectMapper.readValue(jsonString, News.class);
-        } catch (IOException e) {
-            log.error(String.format("Could not convert Kafka message to News " +
-                    "data type, jsonString: %s, error: %s", jsonString, e));
-        }
-        return news;
+    public News mapToNews(NewsArticle newsArticle) {
+        SourceArticle sourceArticle = newsArticle.getSource();
+        return News.builder()
+                .title(newsArticle.getTitle().toString())
+                .publishedAt(newsArticle.getPublishedAt().toString())
+                .url(newsArticle.getUrl().toString())
+                .urlToImage(Optional.ofNullable(newsArticle.getUrlToImage()).toString())
+                .description(Optional.ofNullable(newsArticle.getDescription()).toString())
+                .content(Optional.ofNullable(newsArticle.getContent()).toString())
+                .author(Optional.ofNullable(newsArticle.getAuthor()).toString())
+                .articleText(Optional.ofNullable(newsArticle.getArticleText()).toString())
+                .source(Source.builder()
+                        .name(sourceArticle.getName().toString())
+                        .id(Optional.ofNullable(sourceArticle.getId()).toString())
+                        .description(Optional.ofNullable(sourceArticle.getDescription()).toString())
+                        .url(Optional.ofNullable(sourceArticle.getUrl()).toString())
+                        .category(Optional.ofNullable(sourceArticle.getCategory()).toString())
+                        .language(Optional.ofNullable(sourceArticle.getLanguage()).toString())
+                        .country(Optional.ofNullable(sourceArticle.getCountry()).toString())
+                        .build())
+                .build();
     }
 
 

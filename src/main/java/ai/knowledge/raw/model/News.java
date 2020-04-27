@@ -1,10 +1,14 @@
 package ai.knowledge.raw.model;
 
 import lombok.AllArgsConstructor;
-
-import java.util.Optional;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class News {
     /**
      * title: str
@@ -22,10 +26,10 @@ public class News {
     private String title;
     private String publishedAt;
     private String url;
-    private Optional<String> urlToImage;
-    private Optional<String> description;
-    private Optional<String> content;
-    private Optional<String> author;
-    private Optional<String> articleText;
+    private String urlToImage;
+    private String description;
+    private String content;
+    private String author;
+    private String articleText;
     private Source source;
 }

@@ -2,6 +2,7 @@ package ai.knowledge.raw.service.orientdb;
 
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
+import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.OEdge;
 import com.orientechnologies.orient.core.record.OVertex;
 import lombok.NonNull;
@@ -45,7 +46,10 @@ public class WriterClientService extends ConnectionPoolService {
             // check and create vertex class
             if (db.getClass(vertexObj.getClass().getSimpleName()) == null) {
                 // create an index for document id
-                db.createVertexClass(vertexObj.getClass().getSimpleName()).createIndex("id", OClass.INDEX_TYPE.UNIQUE, "id");
+                OClass orientClass =
+                        db.createVertexClass(vertexObj.getClass().getSimpleName());
+                orientClass.createProperty("id", OType.STRING);
+                orientClass.createIndex("id", OClass.INDEX_TYPE.UNIQUE, "id");
             }
 
             // Create vertex
@@ -182,7 +186,7 @@ public class WriterClientService extends ConnectionPoolService {
             pd = new PropertyDescriptor(fieldName, obj.getClass());
             return pd.getReadMethod().invoke(obj);
         } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            log.error(String.format("Could not call getter for object: %s, " +
+            log.debug(String.format("Could not call getter for object: %s, " +
                             "field: %s, error: %s",
                     obj.getClass().getSimpleName(), fieldName, e.getMessage()));
         }
@@ -193,7 +197,12 @@ public class WriterClientService extends ConnectionPoolService {
         // checks if an object is from JDK package, otherwise custom
         // and needs to be excluded from orientDB vertex/Edge creation as
         // user defined nested objects are not supported
-        return obj.getClass().getPackage().getName().startsWith("java");
+        // TLDR: only allow java package class, orientdb cannot serielize
+        // otherwise
+        log.debug(String.format("%s is being checked if it starts with java " +
+                "package name", obj.getClass().getPackage().getName()));
+        // org.apache.avro.util
+        return (obj.getClass().getPackage().getName().startsWith("java"));
     }
 
 }

@@ -1,11 +1,15 @@
 package ai.knowledge.raw.model;
 
 import lombok.AllArgsConstructor;
-
-import java.util.Optional;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Source {
     /**
      * name: str
@@ -18,10 +22,10 @@ public class Source {
      * country: Optional[str]
      */
     private String name;
-    private Optional<String> id;
-    private Optional<String> description;
-    private Optional<String> url;
-    private Optional<String> category;
-    private Optional<String> language;
-    private Optional<String> country;
+    private String id;
+    private String description;
+    private String url;
+    private String category;
+    private String language;
+    private String country;
 }
